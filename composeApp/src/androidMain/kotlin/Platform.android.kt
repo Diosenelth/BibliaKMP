@@ -20,14 +20,9 @@ actual class DriverFactory(private val context: Context) {
         // 2. check the database file (in first launch the app it does not exist yet)
         if (!database.exists()) {
             // 3. copy your pre-populated database from resources into the Android database directory
-            val inputStream = context.assets.open("biblia")
+            val inputStream = this::class.java.getResourceAsStream("/drawable/biblia.db")
             val outputStream = FileOutputStream(database.absolutePath)
-
-            inputStream.use { input: InputStream ->
-                outputStream.use { output: FileOutputStream ->
-                    input.copyTo(output)
-                }
-            }
+            inputStream?.copyTo(outputStream)
         }
 
         // 4. create the driver
