@@ -14,11 +14,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val database = DriverFactory(this)
-        createDatabase(database)
-        database.createDriver()
+        val dbBiblia = createDatabase(database)
 
         setContent {
-            App()
+            App(dbBiblia)
         }
     }
 }

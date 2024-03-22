@@ -2,9 +2,8 @@ import android.content.Context
 import android.os.Build
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import org.diose.bibliacomposekmp.Database
+import org.diose.bibliacomposekmp.BibliaDatabase
 import java.io.FileOutputStream
-import java.io.InputStream
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
@@ -26,6 +25,6 @@ actual class DriverFactory(private val context: Context) {
         }
 
         // 4. create the driver
-        return AndroidSqliteDriver(Database.Schema, context, "biblia.db")
+        return AndroidSqliteDriver(BibliaDatabase.Schema, context, "biblia.db")
     }
 }

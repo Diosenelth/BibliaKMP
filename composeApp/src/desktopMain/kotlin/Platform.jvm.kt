@@ -1,6 +1,6 @@
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import org.diose.bibliacomposekmp.Database
+import org.diose.bibliacomposekmp.BibliaDatabase
 import java.io.File
 import java.io.FileOutputStream
 
@@ -35,7 +35,7 @@ actual class DriverFactory {
             }
         }
         val driver = JdbcSqliteDriver("jdbc:sqlite:${fileDir.absolutePath}")
-        Database.Schema.create(driver)
+        BibliaDatabase.Schema.create(driver)
         return driver
     }
 }

@@ -4,8 +4,8 @@ import androidx.compose.ui.window.application
 
 fun main() = application {
     val database = DriverFactory()
-    createDatabase(database)
+    val dbBiblia = createDatabase(database)
     Window(onCloseRequest = ::exitApplication, title = "BibliaKMP") {
-        App()
+        App(dbBiblia)
     }
 }

@@ -58,7 +58,7 @@ kotlin {
 
 sqldelight {
     databases {
-        create("Database") {
+        create("BibliaDatabase") {
             packageName.set("org.diose.bibliacomposekmp")
         }
     }

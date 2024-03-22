@@ -1,5 +1,5 @@
 import app.cash.sqldelight.db.SqlDriver
-import org.diose.bibliacomposekmp.Database
+import org.diose.bibliacomposekmp.BibliaDatabase
 
 interface Platform {
     val name: String
@@ -10,7 +10,7 @@ expect class DriverFactory {
     fun createDriver(): SqlDriver
 }
 
-fun createDatabase(driverFactory: DriverFactory): Database {
-    val database = Database(driverFactory.createDriver())
+fun createDatabase(driverFactory: DriverFactory): BibliaDatabase {
+    val database = BibliaDatabase(driverFactory.createDriver())
     return database
 }

@@ -1,23 +1,53 @@
--- import kotlin.Boolean;
---
--- CREATE TABLE Launch (
---     flightNumber INTEGER NOT NULL,
---     missionName TEXT NOT NULL,
---     details TEXT,
---     launchSuccess INTEGER AS Boolean DEFAULT NULL,
---     launchDateUTC TEXT NOT NULL,
---     patchUrlSmall TEXT,
---     patchUrlLarge TEXT,
---     articleUrl TEXT
--- );
---
--- insertLaunch:
--- INSERT INTO Launch(flightNumber, missionName, details, launchSuccess, launchDateUTC, patchUrlSmall, patchUrlLarge, articleUrl)
--- VALUES(?, ?, ?, ?, ?, ?, ?, ?);
---
--- removeAllLaunches:
--- DELETE FROM Launch;
---
--- selectAllLaunchesInfo:
--- SELECT Launch.*
--- FROM Launch;
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS "book_table" (
+	"id"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"num_chapter"	INTEGER NOT NULL,
+	"id_divider"	INTEGER NOT NULL,
+	"old"	TEXT NOT NULL,
+	PRIMARY KEY("id")
+);
+
+CREATE TABLE IF NOT EXISTS "divider_table" (
+	"id"	integer,
+	"name"	text,
+	"color"	text
+);
+
+CREATE TABLE IF NOT EXISTS "verse_table" (
+	"id"	INTEGER NOT NULL,
+	"id_book"	INTEGER NOT NULL,
+	"chapter"	INTEGER NOT NULL,
+	"verse"	INTEGER NOT NULL,
+	"text_verse"	TEXT NOT NULL,
+	"favorite"	INTEGER NOT NULL,
+	"text_note"	TEXT,
+	PRIMARY KEY("id")
+);
+
+--books
+
+selectAllBooks:
+SELECT * FROM book_table;
+
+selectAllBookOld:
+SELECT * FROM book_table WHERE old = 'true';
+
+selectAllBookNew:
+SELECT * FROM book_table WHERE old = 'false';
+
+--verses
+
+getAllVersesByIdbookAndChapter:
+SELECT * FROM verse_table WHERE id_book = ? AND chapter = ?;
+
+getAllFavorites:
+SELECT * FROM verse_table WHERE favorite = 1 ORDER BY verse;
+
+-- getAllVersesSearch:
+-- SELECT * FROM verse_table WHERE text_verse LIKE '%'||:text||'%';
+
+-- marFavorite:
+-- UPDATE verse_table SET favorite = :favorite WHERE id_book = :idBook AND chapter = :chapter  AND verse = :verse;
+

@@ -1,6 +1,6 @@
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import org.diose.bibliacomposekmp.Database
+import org.diose.bibliacomposekmp.BibliaDatabase
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -11,6 +11,6 @@ actual fun getPlatform(): Platform = IOSPlatform()
 
 actual class DriverFactory {
     actual fun createDriver(): SqlDriver {
-        return NativeSqliteDriver(Database.Schema, "test.db")
+        return NativeSqliteDriver(BibliaDatabase.Schema, "biblia.db")
     }
 }
