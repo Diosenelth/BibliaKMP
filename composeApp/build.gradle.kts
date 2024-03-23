@@ -36,6 +36,8 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.sqldelight.android)
+            api(libs.koin.android)
+            api(libs.koin.core)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -47,6 +49,12 @@ kotlin {
             implementation(libs.sqldelight.coroutines)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
+            api(libs.koin.core)
+            api(libs.koin.test)
+            implementation(libs.koin.compose)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            api(libs.mvvm.core)
+            api (libs.mvvm.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -63,6 +71,7 @@ sqldelight {
         create("BibliaDatabase") {
             packageName.set("org.diose.bibliacomposekmp")
         }
+        linkSqlite.set(true)
     }
 }
 

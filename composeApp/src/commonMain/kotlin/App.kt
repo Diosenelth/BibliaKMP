@@ -22,50 +22,64 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import domain.BibliaViewModel
 import org.diose.bibliacomposekmp.BibliaDatabase
 import org.diose.bibliacomposekmp.Book_table
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 
 private lateinit var database: BibliaDatabase
 
 @Composable
 @Preview
-fun App(db: BibliaDatabase? = null) {
-    MaterialTheme {
-        if (db != null) {
-            database = db
-            val listBook = database.databaseQueries.selectAllBooks().executeAsList()
-            Navigator(screen = ShowList(listBook)){navigator ->
-                SlideTransition(navigator)
+fun App(db: BibliaDatabase? = null, viewModel: BibliaViewModel = koinInject()) {
+    KoinContext {
+        MaterialTheme {
+            if (db != null) {
+                database = db
+                viewModel.setDatabase(database)
+                val listBook = database.databaseQueries.selectAllBooks().executeAsList()
+                viewModel.setBooks(listBook)
+                Navigator(screen = FirstScreen()){navigator ->
+                    SlideTransition(navigator)
+                }
             }
         }
     }
 }
 
-class ShowList(private val list: List<Book_table>) : Screen {
+
+class FirstScreen : Screen {
     @Composable
     override fun Content() {
-        val scroll = rememberScrollState()
-        val density = LocalDensity.current
-        var columnWidth by remember { mutableStateOf(0.dp) }
-        LazyColumn(modifier = Modifier.fillMaxSize().scrollable(scroll, Orientation.Vertical)) {
-            items(list) { item ->
-                var expanded by remember { mutableStateOf(false) }
-                Column(
-                    Modifier.clickable { expanded = !expanded }.onGloballyPositioned { layoutCoordinates ->
-                        columnWidth = (layoutCoordinates.size.width / density.density).dp
-                    }
-                ) {
-                    Text(
-                        text = item.name,
-                        modifier = Modifier.fillMaxWidth().height(50.dp).padding(8.dp),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    if (expanded) {
-                        val chapters = (1..item.num_chapter).map { it }
-                        FlowLayout(chapters, item, columnWidth)
-                    }
+        ListBooks()
+    }
+}
+
+@Composable
+fun ListBooks( viewModel: BibliaViewModel = koinInject()){
+    val listBook = viewModel.getBooks()
+    val scroll = rememberScrollState()
+    val density = LocalDensity.current
+    var columnWidth by remember { mutableStateOf(0.dp) }
+    LazyColumn(modifier = Modifier.fillMaxSize().scrollable(scroll, Orientation.Vertical)) {
+        items(listBook) { item ->
+            var expanded by remember { mutableStateOf(false) }
+            Column(
+                Modifier.clickable { expanded = !expanded }.onGloballyPositioned { layoutCoordinates ->
+                    columnWidth = (layoutCoordinates.size.width / density.density).dp
+                }
+            ) {
+                Text(
+                    text = item.name,
+                    modifier = Modifier.fillMaxWidth().height(50.dp).padding(8.dp),
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                if (expanded) {
+                    val chapters = (1..item.num_chapter).map { it }
+                    FlowLayout(chapters, item, columnWidth)
                 }
             }
         }
@@ -73,7 +87,7 @@ class ShowList(private val list: List<Book_table>) : Screen {
 }
 
 @Composable
-fun FlowLayout(items: List<Long>, id: Book_table, columnWidth: Dp) {
+fun FlowLayout(items: List<Long>, id: Book_table, columnWidth: Dp, viewModel: BibliaViewModel = koinInject()) {
     val navigator = LocalNavigator.current
     val density = LocalDensity.current
     val screenWidthPx = with(LocalDensity.current) { columnWidth.toPx() }
@@ -90,7 +104,9 @@ fun FlowLayout(items: List<Long>, id: Book_table, columnWidth: Dp) {
                     ClickableText(
                         text = AnnotatedString("${items[i]}"),
                         onClick = {
-                            navigator?.push(Verses(id, items[i], database))
+                            viewModel.setBook(id)
+                            viewModel.setChapter(items[i])
+                            navigator?.push(Verses())
                         },
                         modifier = Modifier.padding(end = 2.dp).width(50.dp).height(40.dp),
                         style = TextStyle(fontSize = 20.sp)

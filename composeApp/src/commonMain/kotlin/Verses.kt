@@ -13,26 +13,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import org.diose.bibliacomposekmp.BibliaDatabase
-import org.diose.bibliacomposekmp.Book_table
+import domain.BibliaViewModel
+import org.koin.compose.koinInject
 
-
-class Verses(private val book : Book_table, private val chapter : Long, private val db : BibliaDatabase?) : Screen{
+class Verses : Screen{
     @Composable
     override fun Content() {
-        if (db != null){
-            val verses = db.databaseQueries.getAllVersesByIdbookAndChapter(book.id, chapter).executeAsList()
+        showVerses()
+    }
+}
 
-            Column(modifier = Modifier.fillMaxSize().padding(8.dp)){
-                Text("${book.name}: $chapter", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                Spacer(modifier = Modifier.fillMaxWidth().height(10.dp))
-                LazyColumn {
-                    items(verses){
-                        Text(text = "${it.verse}. ${it.text_verse}", fontSize = 22.sp)
-                    }
-                }
+
+@Composable
+fun showVerses(viewModel: BibliaViewModel = koinInject()){
+    val book = viewModel.getBook()
+    val chapter = viewModel.getChapter()
+    val verses = viewModel.getDatabase().databaseQueries.getAllVersesByIdbookAndChapter(book.id, chapter).executeAsList()
+
+    Column(modifier = Modifier.fillMaxSize().padding(8.dp)){
+        Text("${book.name}: $chapter", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+        Spacer(modifier = Modifier.fillMaxWidth().height(10.dp))
+        LazyColumn {
+            items(verses){
+                Text(text = "${it.verse}. ${it.text_verse}", fontSize = 22.sp)
             }
         }
     }
-
 }
