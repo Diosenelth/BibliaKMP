@@ -33,17 +33,15 @@ private lateinit var database: BibliaDatabase
 
 @Composable
 @Preview
-fun App(db: BibliaDatabase? = null, viewModel: BibliaViewModel = koinInject()) {
+fun App(db: BibliaDatabase, viewModel: BibliaViewModel = koinInject()) {
     KoinContext {
         MaterialTheme {
-            if (db != null) {
-                database = db
-                viewModel.setDatabase(database)
-                val listBook = database.databaseQueries.selectAllBooks().executeAsList()
-                viewModel.setBooks(listBook)
-                Navigator(screen = FirstScreen()){navigator ->
-                    SlideTransition(navigator)
-                }
+            database = db
+            viewModel.setDatabase(database)
+            val listBook = database.databaseQueries.selectAllBooks().executeAsList()
+            viewModel.setBooks(listBook)
+            Navigator(screen = FirstScreen()){navigator ->
+                SlideTransition(navigator)
             }
         }
     }

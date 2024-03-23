@@ -3,7 +3,6 @@ package Koin
 import domain.BibliaDBRepository
 import domain.BibliaViewModel
 import domain.RepositoryImpl
-import org.diose.bibliacomposekmp.BibliaDatabase
 import org.koin.core.context.startKoin
 import org.koin.core.module.KoinApplicationDslMarker
 import org.koin.core.module.dsl.createdAtStart
@@ -34,3 +33,5 @@ fun startKoinCommon(appDeclaration: KoinAppDeclaration = {}) {
         modules(sharedModule)
     }
 }
+
+fun getSaherdModules() = sharedModule
