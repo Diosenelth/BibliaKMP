@@ -44,6 +44,7 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+//            implementation(libs.squareup.okio)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.sqldelight.coroutines)

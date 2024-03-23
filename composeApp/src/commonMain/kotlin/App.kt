@@ -29,16 +29,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 
-private lateinit var database: BibliaDatabase
-
 @Composable
 @Preview
 fun App(db: BibliaDatabase, viewModel: BibliaViewModel = koinInject()) {
     KoinContext {
         MaterialTheme {
-            database = db
-            viewModel.setDatabase(database)
-            val listBook = database.databaseQueries.selectAllBooks().executeAsList()
+            viewModel.setDatabase(db)
+            val listBook = db.databaseQueries.selectAllBooks().executeAsList()
             viewModel.setBooks(listBook)
             Navigator(screen = FirstScreen()){navigator ->
                 SlideTransition(navigator)
