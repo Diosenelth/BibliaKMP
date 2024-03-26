@@ -1,5 +1,6 @@
 import BottomBar.BottomBarScreen
-import androidx.compose.material.MaterialTheme
+import BottomBar.VersesTab
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
@@ -16,7 +17,10 @@ fun App(db: BibliaDatabase, viewModel: BibliaViewModel = koinInject()) {
         MaterialTheme {
             viewModel.setDatabase(db)
             val listBook = db.databaseQueries.selectAllBooks().executeAsList()
-            if (listBook.isNotEmpty())viewModel.setBook(listBook[0])
+            if (listBook.isNotEmpty()){
+                viewModel.setBook(listBook[0])
+                VersesTab.title = listBook[0].name
+            }
             viewModel.setBooks(listBook)
             Navigator(screen = BottomBarScreen()){ navigator ->
                 SlideTransition(navigator)

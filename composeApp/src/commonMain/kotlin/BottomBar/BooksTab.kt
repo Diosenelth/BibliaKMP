@@ -1,6 +1,6 @@
 package BottomBar
 
-
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
@@ -23,13 +24,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,11 +44,10 @@ import domain.BibliaViewModel
 import org.diose.bibliacomposekmp.Book_table
 import org.koin.compose.koinInject
 
-object HomeTab : Tab{
-
+object HomeTab : Tab {
     override val options: TabOptions
         @Composable
-        get()  {
+        get() {
             val icon = rememberVectorPainter(Icons.Default.Home)
             return remember {
                 TabOptions(
@@ -59,12 +62,11 @@ object HomeTab : Tab{
     override fun Content() {
         ListBooks()
     }
-
 }
 
 @Composable
-fun ListBooks( viewModel: BibliaViewModel = koinInject()){
-    val listBook = viewModel.getBooks()
+fun ListBooks(viewModel: BibliaViewModel = koinInject()) {
+    val listBook = remember { viewModel.getBooks() }
     val scroll = rememberScrollState()
     val density = LocalDensity.current
     var columnWidth by remember { mutableStateOf(0.dp) }
@@ -72,13 +74,14 @@ fun ListBooks( viewModel: BibliaViewModel = koinInject()){
         items(listBook) { item ->
             var expanded by remember { mutableStateOf(false) }
             Column(
-                Modifier.clickable { expanded = !expanded }.onGloballyPositioned { layoutCoordinates ->
-                    columnWidth = (layoutCoordinates.size.width / density.density).dp
-                }
+                Modifier.clickable { expanded = !expanded }
+                    .onGloballyPositioned { layoutCoordinates ->
+                        columnWidth = (layoutCoordinates.size.width / density.density).dp
+                    }
             ) {
                 Text(
                     text = item.name,
-                    modifier = Modifier.fillMaxWidth().height(50.dp).padding(8.dp),
+                    modifier = Modifier.fillMaxWidth().height(55.dp).padding(8.dp),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -92,7 +95,12 @@ fun ListBooks( viewModel: BibliaViewModel = koinInject()){
 }
 
 @Composable
-fun FlowLayout(items: List<Long>, id: Book_table, columnWidth: Dp, viewModel: BibliaViewModel = koinInject()) {
+fun FlowLayout(
+    items: List<Long>,
+    id: Book_table,
+    columnWidth: Dp,
+    viewModel: BibliaViewModel = koinInject()
+) {
     val navigator = LocalNavigator.current
     val density = LocalDensity.current
     val screenWidthPx = with(LocalDensity.current) { columnWidth.toPx() }
@@ -109,12 +117,21 @@ fun FlowLayout(items: List<Long>, id: Book_table, columnWidth: Dp, viewModel: Bi
                     ClickableText(
                         text = AnnotatedString("${items[i]}"),
                         onClick = {
+                            VersesTab.title = id.name
                             viewModel.setBook(id)
                             viewModel.setChapter(items[i])
                             navigator?.push(VersesTab)
                         },
-                        modifier = Modifier.padding(end = 2.dp).width(50.dp).height(40.dp),
-                        style = TextStyle(fontSize = 20.sp)
+                        modifier = Modifier
+                            .padding(end = 2.dp)
+                            .width(50.dp)
+                            .height(40.dp).border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .align(Alignment.CenterVertically),
+                        style = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
                     )
                 }
             }
