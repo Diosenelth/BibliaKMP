@@ -42,7 +42,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material3)
+            implementation(compose.material)
             implementation(compose.ui)
 //            implementation(libs.squareup.okio)
             implementation(compose.components.resources)
@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.sqldelight.coroutines)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
+            implementation(libs.voyager.tabNavigator)
             api(libs.koin.core)
             api(libs.koin.test)
             implementation(libs.koin.compose)
