@@ -94,12 +94,12 @@ fun showVersesSearch(viewModel: BibliaViewModel = koinInject()){
         }
         Row(
             modifier = Modifier.fillMaxWidth()
-            .height(65.dp),
+            .height(70.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
-                modifier = Modifier.height(60.dp).weight(1f),
+                modifier = Modifier.height(65.dp).weight(1f),
                 value = searchText,
                 label = { Text(text = "Escriba aqui") },
                 onValueChange = { searchText = it },

@@ -1,5 +1,6 @@
 package BottomBar
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,12 +32,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bibliakmp.composeapp.generated.resources.Res
+import bibliakmp.composeapp.generated.resources.navigate_before
+import bibliakmp.composeapp.generated.resources.navigate_next
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import domain.BibliaViewModel
 import org.diose.bibliacomposekmp.Book_table
 import org.diose.bibliacomposekmp.Verse_table
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
 object VersesTab : Tab {
@@ -59,6 +66,7 @@ object VersesTab : Tab {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun showVerses(viewModel: BibliaViewModel = koinInject()){
     val book = viewModel.getBook()
@@ -75,22 +83,39 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
                 }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth().height(50.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically ) {
-            FloatingActionButton(content = { Text("<") }, onClick = {
-                if (chapter > 1) {
-                    viewModel.setChapter(chapter - 1)
-                    chapter -= 1
+        Row(
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            FloatingActionButton(
+                onClick = {
+                    if (chapter > 1) {
+                        viewModel.setChapter(chapter - 1)
+                        chapter -= 1
+                    }
+                }, content = {
+                    Image(painterResource(Res.drawable.navigate_before), "Capitulo anterior.")
                 }
-            })
+            )
 
-            Text("${book.name}: $chapter", fontWeight = FontWeight.Bold, fontSize = 25.sp, textAlign = TextAlign.Center)
+            Text(
+                "${book.name}: $chapter",
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                textAlign = TextAlign.Center
+            )
 
-            FloatingActionButton(content = { Text(">") }, onClick = {
-                if (chapter + 1 <= book.num_chapter) {
-                    viewModel.setChapter(chapter + 1)
-                    chapter += 1
+            FloatingActionButton(
+                onClick = {
+                    if (chapter + 1 <= book.num_chapter) {
+                        viewModel.setChapter(chapter + 1)
+                        chapter += 1
+                    }
+                }, content = {
+                    Image(painterResource(Res.drawable.navigate_next), "Capitulo siguiente.")
                 }
-            })
+            )
         }
     }
 }
