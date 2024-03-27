@@ -24,10 +24,10 @@ class BottomBarScreen : Screen {
     @Composable
     override fun Content() {
         TabNavigator(
-            HomeTab,
+            BooksTab,
             tabDisposable = {
                 TabDisposable(
-                    it, listOf(HomeTab, VersesTab)
+                    it, listOf(BooksTab, VersesTab, SearchTab)
                 )
             }
         ){
@@ -40,10 +40,10 @@ class BottomBarScreen : Screen {
                         val tabNavigator = LocalTabNavigator.current
 
                         NavigationBarItem(
-                            selected = tabNavigator.current.key == HomeTab.key,
-                            label = { Text(HomeTab.options.title) },
-                            icon = { Icon(painter = HomeTab.options.icon!!, contentDescription = null) },
-                            onClick = { tabNavigator.current = HomeTab }
+                            selected = tabNavigator.current.key == BooksTab.key,
+                            label = { Text(BooksTab.options.title) },
+                            icon = { Icon(painter = BooksTab.options.icon!!, contentDescription = null) },
+                            onClick = { tabNavigator.current = BooksTab }
                         )
                         NavigationBarItem(
                             selected = tabNavigator.current.key == VersesTab.key,
@@ -51,15 +51,23 @@ class BottomBarScreen : Screen {
                             icon = { Icon(painter = VersesTab.options.icon!!, contentDescription = null) },
                             onClick = { tabNavigator.current = VersesTab }
                         )
+                        NavigationBarItem(
+                            selected = tabNavigator.current.key == SearchTab.key,
+                            label = { Text(SearchTab.options.title) },
+                            icon = { Icon(painter = SearchTab.options.icon!!, contentDescription = null) },
+                            onClick = { tabNavigator.current = SearchTab }
+                        )
 
                     }
                 }, content = {
-                    Box(modifier = Modifier.padding(
-                        0.dp,
-                        it.calculateTopPadding(),
-                        0.dp,
-                        it.calculateBottomPadding()
-                    )){
+                    Box(
+                        modifier = Modifier.padding(
+                            0.dp,
+                            it.calculateTopPadding(),
+                            0.dp,
+                            it.calculateBottomPadding()
+                        )
+                    ) {
                         CurrentTab()
                     }
                 }

@@ -45,8 +45,11 @@ SELECT * FROM verse_table WHERE id_book = ? AND chapter = ?;
 getAllFavorites:
 SELECT * FROM verse_table WHERE favorite = 1 ORDER BY verse;
 
--- getAllVersesSearch:
--- SELECT * FROM verse_table WHERE text_verse LIKE '%'||:text||'%';
+getAllVersesSearch:
+SELECT * FROM verse_table WHERE text_verse LIKE '%'||?||'%';
+
+getBooksSearch:
+SELECT * FROM book_table WHERE name LIKE '%'||?||'%';
 
 -- marFavorite:
 -- UPDATE verse_table SET favorite = :favorite WHERE id_book = :idBook AND chapter = :chapter  AND verse = :verse;

@@ -75,10 +75,9 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
                 }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth().height(50.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
+        Row(modifier = Modifier.fillMaxWidth().height(50.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically ) {
             FloatingActionButton(content = { Text("<") }, onClick = {
                 if (chapter > 1) {
-                    println("Click -")
                     viewModel.setChapter(chapter - 1)
                     chapter -= 1
                 }
@@ -88,7 +87,6 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
 
             FloatingActionButton(content = { Text(">") }, onClick = {
                 if (chapter + 1 <= book.num_chapter) {
-                    println("Click +")
                     viewModel.setChapter(chapter + 1)
                     chapter += 1
                 }
