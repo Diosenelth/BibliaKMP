@@ -57,6 +57,7 @@ kotlin {
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.mvvm.core)
             api (libs.mvvm.compose)
+            api (libs.mvvm.livedata)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

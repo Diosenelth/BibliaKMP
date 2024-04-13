@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ import bibliakmp.composeapp.generated.resources.navigate_next
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import domain.BibliaViewModel
+import kotlinx.coroutines.coroutineScope
 import org.diose.bibliacomposekmp.Verse_table
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -67,11 +70,20 @@ object VersesTab : Tab {
 fun showVerses(viewModel: BibliaViewModel = koinInject()){
     val book = viewModel.getBook()
     var chapter by remember { mutableStateOf(0L)}
-    var verse = viewModel.getVerse()
+    var verse by remember { mutableStateOf(0)}
     val lazyColumnListState = rememberLazyListState()
     chapter = viewModel.getChapter()
+    verse = viewModel.getVerse()
     val verses = remember {  mutableStateListOf<Verse_table>() }
     verses.swapList(viewModel.getDatabase().databaseQueries.getAllVersesByIdbookAndChapter(book.id, chapter).executeAsList())
+
+    LaunchedEffect(key1 = Unit){
+        if (verse == 0){
+            lazyColumnListState.scrollToItem(0)
+        }else{
+            lazyColumnListState.animateScrollToItem((verse - 1))
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         Box(modifier = Modifier.weight(1f)) {
@@ -79,12 +91,6 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
                 items(items = verses, key = { it.id }) {
                     Text(text = "${it.verse}. ${it.text_verse}", fontSize = 22.sp)
                 }
-
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    if (verse.toInt() != 0) {
-//                        lazyColumnListState.animateScrollToItem((verse - 1).toInt())
-//                    }
-//                }
             }
         }
         Row(
@@ -95,6 +101,8 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
             FloatingActionButton(
                 onClick = {
                     if (chapter > 1) {
+                        verse = 0
+                        viewModel.setVerse(0)
                         viewModel.setChapter(chapter - 1)
                         chapter -= 1
                     }
@@ -113,6 +121,8 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
             FloatingActionButton(
                 onClick = {
                     if (chapter + 1 <= book.num_chapter) {
+                        verse = 0
+                        viewModel.setVerse(0)
                         viewModel.setChapter(chapter + 1)
                         chapter += 1
                     }
@@ -124,7 +134,26 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
     }
 }
 
-fun <T> SnapshotStateList<T>.swapList(newList: List<T>){
+@Immutable
+data class Verses(
+    val id: Long,
+    val id_book: Long,
+    val chapter: Long,
+    val verse: Long,
+    val text_verse: String,
+    val favorite: Long,
+    val text_note: String?,
+)
+
+fun List<Verse_table>.convertVerses() : List<Verses> {
+    return this.map {
+        Verses(
+            it.id, it.id_book, it.chapter, it.verse, it.text_verse, it.favorite, it.text_note
+        )
+    }
+}
+
+fun <Verse_table> SnapshotStateList<Verse_table>.swapList(newList: List<Verse_table>){
     clear()
     addAll(newList)
 }
