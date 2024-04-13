@@ -16,4 +16,8 @@ interface BibliaDBRepository {
     fun getChapter(): Long
 
     fun setChapter(chapter : Long)
+
+    fun getVerse(): Long
+
+    fun setVerse(verse : Long)
 }

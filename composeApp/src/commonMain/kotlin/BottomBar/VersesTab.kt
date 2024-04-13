@@ -5,18 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,11 +33,9 @@ import androidx.compose.ui.unit.sp
 import bibliakmp.composeapp.generated.resources.Res
 import bibliakmp.composeapp.generated.resources.navigate_before
 import bibliakmp.composeapp.generated.resources.navigate_next
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import domain.BibliaViewModel
-import org.diose.bibliacomposekmp.Book_table
 import org.diose.bibliacomposekmp.Verse_table
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -71,16 +67,24 @@ object VersesTab : Tab {
 fun showVerses(viewModel: BibliaViewModel = koinInject()){
     val book = viewModel.getBook()
     var chapter by remember { mutableStateOf(0L)}
+    var verse = viewModel.getVerse()
+    val lazyColumnListState = rememberLazyListState()
     chapter = viewModel.getChapter()
     val verses = remember {  mutableStateListOf<Verse_table>() }
     verses.swapList(viewModel.getDatabase().databaseQueries.getAllVersesByIdbookAndChapter(book.id, chapter).executeAsList())
 
     Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         Box(modifier = Modifier.weight(1f)) {
-            LazyColumn {
-                items(verses) {
+            LazyColumn(state = lazyColumnListState) {
+                items(items = verses, key = { it.id }) {
                     Text(text = "${it.verse}. ${it.text_verse}", fontSize = 22.sp)
                 }
+
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    if (verse.toInt() != 0) {
+//                        lazyColumnListState.animateScrollToItem((verse - 1).toInt())
+//                    }
+//                }
             }
         }
         Row(

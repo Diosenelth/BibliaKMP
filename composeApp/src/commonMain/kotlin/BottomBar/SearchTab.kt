@@ -84,6 +84,7 @@ fun showVersesSearch(viewModel: BibliaViewModel = koinInject()){
                             VersesTab.title = filterBook[0].name
                             viewModel.setBook(filterBook[0])
                             viewModel.setChapter(it.chapter)
+                            viewModel.setVerse(it.verse)
                             navigator?.push(VersesTab)
                         },
                         style = TextStyle(fontSize = 22.sp)

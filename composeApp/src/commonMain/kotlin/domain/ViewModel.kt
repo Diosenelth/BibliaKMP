@@ -40,4 +40,12 @@ class BibliaViewModel(private val repository : BibliaDBRepository) : ViewModel()
         repository.setDatabase(databaseVm)
     }
 
+    fun getVerse():Long{
+        return repository.getVerse()
+    }
+
+    fun setVerse(verse: Long){
+        repository.setVerse(verse)
+    }
+
 }

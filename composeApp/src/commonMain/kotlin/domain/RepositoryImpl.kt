@@ -7,6 +7,7 @@ private var listBook : List<Book_table> = listOf()
 private var bookImpl : Book_table? = null
 private var chapterImpl : Long = 1
 private var database : BibliaDatabase? = null
+private var verseImpl : Long = 0
 class RepositoryImpl : BibliaDBRepository {
     override fun getBooks(): List<Book_table> {
         return listBook
@@ -38,5 +39,13 @@ class RepositoryImpl : BibliaDBRepository {
 
     override fun setChapter(chapter: Long) {
         chapterImpl = chapter
+    }
+
+    override fun getVerse(): Long {
+        return verseImpl
+    }
+
+    override fun setVerse(verse: Long) {
+        verseImpl = verse
     }
 }

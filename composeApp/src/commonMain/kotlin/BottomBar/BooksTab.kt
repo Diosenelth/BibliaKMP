@@ -99,7 +99,7 @@ fun ListBooks(viewModel: BibliaViewModel = koinInject()) {
                     }
                 }
 
-                items(entry.value) { item ->
+                items(items = entry.value, key = { it.id }) { item ->
                     var expanded by remember { mutableStateOf(false) }
                     Column(
                         Modifier.clickable { expanded = !expanded }
@@ -149,6 +149,7 @@ fun FlowLayout(
                         onClick = {
                             VersesTab.title = id.name
                             viewModel.setBook(id)
+                            viewModel.setVerse(0)
                             viewModel.setChapter(items[i])
                             navigator?.push(VersesTab)
                         },
