@@ -38,7 +38,6 @@ import bibliakmp.composeapp.generated.resources.navigate_next
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import domain.BibliaViewModel
-import kotlinx.coroutines.coroutineScope
 import org.diose.bibliacomposekmp.Verse_table
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

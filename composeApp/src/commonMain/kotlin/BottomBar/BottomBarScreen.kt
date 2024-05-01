@@ -12,7 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -33,7 +35,7 @@ class BottomBarScreen : Screen {
         ){
             Scaffold(
                 topBar = {
-                    TopAppBar(title = { Text(it.current.options.title) })
+                    TopAppBar(title = { Text(text = it.current.options.title, fontSize = 22.sp, fontWeight = FontWeight.Bold ) })
                 },
                 bottomBar = {
                     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {

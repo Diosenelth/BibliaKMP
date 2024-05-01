@@ -156,10 +156,11 @@ fun FlowLayout(
                         modifier = Modifier
                             .padding(end = 2.dp)
                             .width(50.dp)
-                            .height(40.dp).border(
+                            .height(40.dp)
+                            .border(
                                 width = 1.dp,
                                 color = Color.Gray,
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(8.dp)
                             )
                             .align(Alignment.CenterVertically),
                         style = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
