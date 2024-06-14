@@ -76,14 +76,6 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
     val verses = remember {  mutableStateListOf<Verse_table>() }
     verses.swapList(viewModel.getDatabase().databaseQueries.getAllVersesByIdbookAndChapter(book.id, chapter).executeAsList())
 
-    LaunchedEffect(key1 = Unit){
-        if (verse == 0){
-            lazyColumnListState.scrollToItem(0)
-        }else{
-            lazyColumnListState.animateScrollToItem((verse - 1))
-        }
-    }
-
     Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(state = lazyColumnListState) {
@@ -129,6 +121,14 @@ fun showVerses(viewModel: BibliaViewModel = koinInject()){
                     Image(painterResource(Res.drawable.navigate_next), "Capitulo siguiente.")
                 }
             )
+        }
+    }
+
+    LaunchedEffect(key1 = chapter){
+        if (verse == 0){
+            lazyColumnListState.scrollToItem(0)
+        }else{
+            lazyColumnListState.animateScrollToItem((verse - 1))
         }
     }
 }
